@@ -52,18 +52,23 @@ client.on("messageCreate", async (message) => {
                 url: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/50ca5b2f-036a-4021-95b5-7c0f86d7b9a1/de0tyff-9efba6d3-d8c0-44c9-b25f-9445d45b34ab.png/v1/fit/w_784,h_231,q_70,strp/pick_roles_banner_by_akibanax_de0tyff-414w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjMxIiwicGF0aCI6IlwvZlwvNTBjYTViMmYtMDM2YS00MDIxLTk1YjUtN2MwZjg2ZDdiOWExXC9kZTB0eWZmLTllZmJhNmQzLWQ4YzAtNDRjOS1iMjVmLTk0NDVkNDViMzRhYi5wbmciLCJ3aWR0aCI6Ijw9Nzg0In1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.Vo_m2QbrWPnct4eY6d7ajd0vm-FhOkx1S6MHhVoafrw"
             }
         };
-        
+
         const embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
 
         // Emoji hozzáadása az üzenethez
         const emojis = [
-            '1075493415061553234', '1075490145312198666', '1075490140165779577',
-            '1075490143777075251', '1075494339951743049', '1075490131580039240',
-            '1145405267782156389', '1075490133496844288', '1139905910081327144'
+            'Valorant_Iron', 'Bronze_Valorant', 'Silver_Valorant',
+            '6940_Gold_Valorant', 'Platinum_Valorant', '8091_Diamond_Valorant',
+            'ascend', '8262_Immortal_Valorant', '5979valorantradiant'
         ];
 
-        for (const emojiId of emojis) {
-            await embedMessage.react(`<:${emojiId}>`);
+        for (const emojiName of emojis) {
+            const emoji = client.emojis.cache.find(emoji => emoji.name === emojiName);
+            if (emoji) {
+                await embedMessage.react(emoji);
+            } else {
+                console.error(`Emoji not found: ${emojiName}`);
+            }
         }
 
         // Várakozás a reakciókra és azonnali rang hozzáadása vagy eltávolítása
