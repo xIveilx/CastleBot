@@ -85,10 +85,12 @@ client.on("messageCreate", async (message) => {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
                     await reaction.users.remove(message.author.id);
                     message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
+                    console.log("rang eltávolitva");
                 } else {
                     // Felhasználó még nem rendelkezik a ranggal, adjuk hozzá
                     await member.roles.add(roleId);
                     message.channel.send(`Rang hozzáadva: <@&${roleId}>`);
+                    console.log("rang hozzáadva");
                 }
             }
         });
