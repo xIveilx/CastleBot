@@ -135,6 +135,9 @@ client.on('interactionCreate', (interaction) => {
     }
     //2 szám összeadása
     if(interaction.commandName == 'valorant'){
+        if (!interaction.channelId.cache.has('1137112266123255889')){
+            return;
+        }
         //if (!interaction.member.roles.cache.has('1103270687839354920')) {
         //    interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
         //    return;
