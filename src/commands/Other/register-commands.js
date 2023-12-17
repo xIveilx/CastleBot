@@ -3,8 +3,8 @@ const {REST,Routes,ApplicationCommandOptionType, ApplicationCommandType} = requi
 
 const commands = [
     {
-        name: 'add',
-        description: 'Ember keresése.',
+        name: 'valorant',
+        description: 'Valoranthoz ember keresése.',
         options: [
             {
                 name: 'rank',

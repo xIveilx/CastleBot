@@ -134,11 +134,11 @@ client.on('interactionCreate', (interaction) => {
         interaction.reply('pong!');
     }
     //2 szám összeadása
-    if(interaction.commandName == 'add'){
-        if (!interaction.member.roles.cache.has('1103270687839354920')) {
-            interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
-            return;
-        }
+    if(interaction.commandName == 'valorant'){
+        //if (!interaction.member.roles.cache.has('1103270687839354920')) {
+        //    interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
+        //    return;
+        //}
         const rank_amibe_keresel = interaction.options.get('rank').value;
         const játék_módja = interaction.options.get('játék_módja').value;
         const személyek_száma = interaction.options.get('személyek_száma').value;
