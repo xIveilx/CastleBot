@@ -95,7 +95,7 @@ client.on("messageCreate", async (message) => {
     }
 });
 
-function getRoleIdFromEmojiId(emojiId) {
+function getRoleIdFromEmojiId(emojiName) {
     const emojiRoleMap = {
         'Valorant_Iron': '1137112102469906583', // Valorant_Iron
         'Bronze_Valorant': '1137112095968735333', // Bronze_Valorant
@@ -108,7 +108,7 @@ function getRoleIdFromEmojiId(emojiId) {
         '5979valorantradiant': '1137143014989516810'  // 5979valorantradiant
     };
 
-    return emojiRoleMap[emojiId] || null;
+    return emojiRoleMap[emojiName] || null;
 }
 
 //interakciok
