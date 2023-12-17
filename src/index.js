@@ -135,10 +135,7 @@ client.on('interactionCreate', (interaction) => {
         interaction.reply('pong!');
     }
     //2 szám összeadása
-    if(interaction.commandName == 'valorant'){
-        if(interaction.channel.id === '1137112266123255889'){
-            return;
-        }
+    if(interaction.commandName == 'valorant' && interaction.channelId === '1137112266123255889'){
         //if (!interaction.member.roles.cache.has('1103270687839354920')) {
         //    interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
         //    return;
@@ -216,7 +213,7 @@ client.on('interactionCreate', (interaction) => {
         )
         .setTimestamp()
         .setFooter({
-            text: "/add parancsal tudsz csapatot keresni",
+            text: "/valorant parancsal tudsz csapatot keresni",
         });
 
         interaction.reply({
