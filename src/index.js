@@ -97,15 +97,15 @@ client.on("messageCreate", async (message) => {
 
 function getRoleIdFromEmojiId(emojiId) {
     const emojiRoleMap = {
-        '1075493415061553234': '1137112102469906583', // Valorant_Iron
-        '1075490145312198666': '1137112095968735333', // Bronze_Valorant
-        '1075490140165779577': '1137112096891490375', // Silver_Valorant
-        '1075490143777075251': '1137112097499656214', // 6940_Gold_Valorant
-        '1075494339951743049': '1137112098837635153', // Platinum_Valorant
-        '1075490131580039240': '1137112100284669995', // 8091_Diamond_Valorant
-        '1145405267782156389': '1145404359627264110', // ascend
-        '1075490133496844288': '1137112101467455609', // 8262_Immortal_Valorant
-        '1139905910081327144': '1137143014989516810'  // 5979valorantradiant
+        '<:Valorant_Iron:1075493415061553234>': '1137112102469906583', // Valorant_Iron
+        '<:Bronze_Valorant:1075490145312198666>': '1137112095968735333', // Bronze_Valorant
+        '<:Silver_Valorant:1075490140165779577>': '1137112096891490375', // Silver_Valorant
+        '<:6940_Gold_Valorant:1075490143777075251>': '1137112097499656214', // 6940_Gold_Valorant
+        '<:Platinum_Valorant:1075494339951743049>': '1137112098837635153', // Platinum_Valorant
+        '<:8091_Diamond_Valorant:1075490131580039240>': '1137112100284669995', // 8091_Diamond_Valorant
+        '<:ascend:1145405267782156389>': '1145404359627264110', // ascend
+        '<:8262_Immortal_Valorant:1075490133496844288>': '1137112101467455609', // 8262_Immortal_Valorant
+        '<:5979valorantradiant:1139905910081327144>': '1137143014989516810'  // 5979valorantradiant
     };
 
     return emojiRoleMap[emojiId] || null;
