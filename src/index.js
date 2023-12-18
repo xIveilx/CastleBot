@@ -1,18 +1,17 @@
 require('dotenv').config();
 const otherFile = require('./commands/Other/register-commands.js');
 //nodemon
-const {Client,IntentsBitField,Integration,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
+const {Client,GatewayIntentBits,Partials,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
 
 const client = new Client({
     intents: [
-
-        //alapok
-
-        IntentsBitField.Flags.Guilds,
-        IntentsBitField.Flags.GuildMembers,
-        IntentsBitField.Flags.GuildMessages,
-        IntentsBitField.Flags.MessageContent,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMessageReactions,
     ],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
 //Bot elindulás üzenet
@@ -31,7 +30,7 @@ client.on("messageCreate", async (message) => {
     const prefix = "=";
 
     if (message.content.startsWith(prefix + "rangválasztó1")) {
-        if (!message.member.roles.cache.has('1103270687839354920')) {
+        if (!message.member.roles.cache.has('1186234636163092500')) {
             message.reply(`nincs jogod ehhez! :D ${message.author.username}`);
             return;
         }
@@ -63,47 +62,51 @@ client.on("messageCreate", async (message) => {
             'ascend', '8262_Immortal_Valorant', '5979valorantradiant'
         ];
 
-        for (const emojiName of emojis) {
-            const emoji = client.emojis.cache.find(emoji => emoji.name === emojiName);
+        emojis.forEach(async (item) => {
+            const emoji = client.emojis.cache.find(emoji => emoji.name === item);
             if (emoji) {
                 await embedMessage.react(emoji);
             } else {
-                console.error(`Emoji not found: ${emojiName}`);
+                console.error(`Emoji not found: ${item}`);
             }
-        }
+        })
 
         // Várakozás a reakciókra és azonnali rang hozzáadása vagy eltávolítása
-        
-        const collectorFilter = (reaction, user) => {
-            console.log(user.id,message.author.id);
-            return emojis.includes(reaction.emoji.id) && user.id === message.author.id
-            
-        };
-        const collector = embedMessage.createReactionCollector({ filter: collectorFilter });
+        const collectorFilter = (reaction, user) => emojis.includes(reaction.emoji.name) && user.id === message.author.id;
+        const collector = embedMessage.createReactionCollector({ filter: collectorFilter })
 
-        collector.on('collect', async (reaction) => {
-            const roleId = getRoleIdFromEmojiId(reaction.emoji.id);
+        collector.on('collect', async (reaction, user) => {
+            const roleId = getRoleIdFromEmojiName(reaction.emoji.name);
 
             if (roleId) {
                 const member = message.guild.members.cache.get(message.author.id);
                 
+                await reaction.users.remove(message.author.id);
+
                 if (member.roles.cache.has(roleId)) {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
-                    await reaction.users.remove(message.author.id);
+                    await member.roles.remove(roleId);
                     message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
                     console.log("rang eltávolitva");
                 } else {
                     // Felhasználó még nem rendelkezik a ranggal, adjuk hozzá
+                    emojis.forEach((name) => {
+                        const id = getRoleIdFromEmojiName(name)
+                        if (id) {
+                            member.roles.remove(id)
+                        }
+                    })
                     await member.roles.add(roleId);
                     message.channel.send(`Rang hozzáadva: <@&${roleId}>`);
                     console.log("rang hozzáadva");
                 }
             }
-        });
+        })
+
     }
 });
 
-function getRoleIdFromEmojiId(emojiName) {
+function getRoleIdFromEmojiName(emojiName) {
     const emojiRoleMap = {
         'Valorant_Iron': '1137112102469906583', // Valorant_Iron
         'Bronze_Valorant': '1137112095968735333', // Bronze_Valorant
@@ -120,12 +123,11 @@ function getRoleIdFromEmojiId(emojiName) {
 }
 
 //interakciok
-
 client.on('interactionCreate', (interaction) => {
     if(!interaction.isChatInputCommand()) return;
     //hey
     if(interaction.commandName == 'hey'){
-        if (!interaction.member.roles.cache.has('1103270687839354920')) {
+        if (!interaction.member.roles.cache.has('1186234636163092500')) {
             interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
             return;
         }
@@ -133,7 +135,7 @@ client.on('interactionCreate', (interaction) => {
     }
     //ping
     if(interaction.commandName == 'ping'){
-        if (!interaction.member.roles.cache.has('1103270687839354920')) {
+        if (!interaction.member.roles.cache.has('1186234636163092500')) {
             interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
             return;
         }
@@ -141,7 +143,7 @@ client.on('interactionCreate', (interaction) => {
     }
     //2 szám összeadása
     if(interaction.commandName == 'valorant' && interaction.channelId === '1137112266123255889'){
-        //if (!interaction.member.roles.cache.has('1103270687839354920')) {
+        //if (!interaction.member.roles.cache.has('1186234636163092500')) {
         //    interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
         //    return;
         //}
@@ -227,7 +229,7 @@ client.on('interactionCreate', (interaction) => {
     }
     //beágyazás
     if(interaction.commandName == 'beágyazás'){
-        if (!interaction.member.roles.cache.has('1103270687839354920')) {
+        if (!interaction.member.roles.cache.has('1186234636163092500')) {
             interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
             return;
         }
