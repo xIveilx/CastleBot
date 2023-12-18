@@ -30,7 +30,7 @@ client.on("messageCreate", async (message) => {
     const prefix = "=";
 
     if (message.content.startsWith(prefix + "rangválasztó1")) {
-        if (!message.member.roles.cache.has('1186234636163092500')) {
+        if (!message.member.roles.cache.has('1103270687839354920')) {
             message.reply(`nincs jogod ehhez! :D ${message.author.username}`);
             return;
         }
