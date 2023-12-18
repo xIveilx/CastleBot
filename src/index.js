@@ -73,6 +73,7 @@ client.on("messageCreate", async (message) => {
         }
 
         // Várakozás a reakciókra és azonnali rang hozzáadása vagy eltávolítása
+        console.log(interaction.user.id,interaction.message.author.id);
         const collectorFilter = (reaction, user) => emojis.includes(reaction.emoji.id) && user.id === message.author.id;
         const collector = embedMessage.createReactionCollector({ filter: collectorFilter });
 
