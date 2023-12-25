@@ -83,7 +83,9 @@ client.on("messageCreate", async (message) => {
             };
             write("./src/functions/messagerank.json",data);
         }else{
-            embedMessage = messagerank;
+            const guild = client.guilds.cache.get(messagerank.guildId);
+            const ruleChannel = guild.channels.cache.get(messagerank.channelId);
+            embedMessage =  ruleChannel.messages.fetch(messagerank.id);
         }
 
         // Emoji hozzáadása az üzenethez
