@@ -44,33 +44,12 @@ client.on("messageCreate", async (message) => {
     if (message.author.bot) {
         return;
     }
-    
-    const valorant = message.content.split("valorant");
-    const ranked = message.content.split("ranked");
-    const comp = message.content.split("comp");
-    console.log(valorant,ranked,comp);
 
-    for (let i = 0; i < valorant.length; i++) {
-        if(valorant[i] == "" && message.channelId == ("1185072726453530664")){
-            message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
-            return;
-        }
-    }
-    for (let i = 0; i < ranked.length; i++) {
-        if(ranked[i] == "" && message.channelId == ("1185072726453530664")){
-            message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
-            return;
-        }
-    }
-    for (let i = 0; i < comp.length; i++) {
-        if(comp[i] == "" && message.channelId == ("1185072726453530664")){
-            message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
-            return;
-        }
-    }
-    if (message.content.includes("valorant")){
+    if (message.content.includes("valorant") && message.channelId == ("1185072726453530664")
+     || message.content.includes("ranked") && message.channelId == ("1185072726453530664")
+     || message.content.includes("comp") && message.channelId == ("1185072726453530664")){
         message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
-            return;
+        return;
     }
 
     const prefix = "=";
