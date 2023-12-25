@@ -50,19 +50,19 @@ client.on("messageCreate", async (message) => {
     const comp = message.content.split("comp");
 
     for (let i = 0; i < valorant.length; i++) {
-        if(valorant[i].split("valorant") == "valorant" && message.channelId == ("1185072726453530664")){
+        if(valorant[i] == "valorant" && message.channelId == ("1185072726453530664")){
             message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
             return;
         }
     }
     for (let i = 0; i < ranked.length; i++) {
-        if(ranked[i].split("ranked") == "ranked" && message.channelId == ("1185072726453530664")){
+        if(ranked[i] == "ranked" && message.channelId == ("1185072726453530664")){
             message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
             return;
         }
     }
     for (let i = 0; i < comp.length; i++) {
-        if(comp[i].split("comp") == "comp" && message.channelId == ("1185072726453530664")){
+        if(comp[i] == "comp" && message.channelId == ("1185072726453530664")){
             message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
             return;
         }
