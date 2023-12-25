@@ -45,7 +45,7 @@ client.on("messageCreate", async (message) => {
         return;
     }
 
-    if(message.content == "valorant"){
+    if(message.content.split(" ") == "valorant"){
         message.reply("igen");
     }
 
