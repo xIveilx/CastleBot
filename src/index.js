@@ -48,13 +48,9 @@ client.on("messageCreate", async (message) => {
     const valorant = message.content.split(" ");
 
     for (let i = 0; i < valorant.length; i++) {
-        if(valorant[i] == "valorant"){
+        if(valorant[i] == "valorant" || valorant[i] == "ranked" || valorant[i] == "comp"){
             message.reply("igen");
         }
-    }
-
-    if(message.content.split("valorant") == "valorant"){
-        message.reply("igen");
     }
 
     const prefix = "=";
