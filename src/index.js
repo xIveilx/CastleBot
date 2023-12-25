@@ -60,7 +60,7 @@ client.on("messageCreate", async (message) => {
 
             let embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
         }else{
-            let embedMessage = messagerank;
+            let embedMessage = message.channel(messagerank);
         }
 
         // Emoji hozzáadása az üzenethez
