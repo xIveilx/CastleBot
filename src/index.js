@@ -59,6 +59,7 @@ client.on("messageCreate", async (message) => {
             };
 
             let embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
+            console.log(embedMessage);
         //}else{
             //let embedMessage = message.content(messagerank);
         //}
