@@ -48,6 +48,7 @@ client.on("messageCreate", async (message) => {
     const valorant = message.content.split("valorant");
     const ranked = message.content.split("ranked");
     const comp = message.content.split("comp");
+    console.log(valorant,ranked,comp);
 
     for (let i = 0; i < valorant.length; i++) {
         if(valorant[i] == "valorant" && message.channelId == ("1185072726453530664")){
