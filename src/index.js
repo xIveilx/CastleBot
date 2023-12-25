@@ -78,7 +78,10 @@ client.on("messageCreate", async (message) => {
             embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
             console.log(embedMessage);
             messagerank = embedMessage;
-            write("./src/functions/messagerank.json",embedMessage)
+            const data = {
+                messagerank: embedMessage
+            };
+            write("./src/functions/messagerank.json",data);
         }else{
             embedMessage = messagerank;
         }
