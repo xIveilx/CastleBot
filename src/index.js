@@ -1,5 +1,6 @@
 require('dotenv').config(); 
 const registercommandsfile = require('./commands/Other/register-commands.js');
+const fs = require("fs");
 //nodemon
 const {Client,GatewayIntentBits,Partials,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
 
