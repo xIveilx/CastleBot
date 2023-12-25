@@ -1,5 +1,6 @@
 require('dotenv').config();
-const registercommands = require('./commands/Other/register-commands.js');
+const registercommandsfile = require('./commands/Other/register-commands.js');
+const messagerankfile = require('./functions/messagerank.js');
 //nodemon
 const {Client,GatewayIntentBits,Partials,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
 
@@ -35,26 +36,29 @@ client.on("messageCreate", async (message) => {
             return;
         }
 
-        const rangválasztó1 = {
-            title: "1. Add meg a jelenlegi valorant rankodat:",
-            description: `
-                <:Valorant_Iron:1075493415061553234> - <@&1137112102469906583> \n
-                <:Bronze_Valorant:1075490145312198666> - <@&1137112095968735333> \n
-                <:Silver_Valorant:1075490140165779577> - <@&1137112096891490375> \n
-                <:6940_Gold_Valorant:1075490143777075251> - <@&1137112097499656214> \n
-                <:Platinum_Valorant:1075494339951743049> - <@&1137112098837635153> \n
-                <:8091_Diamond_Valorant:1075490131580039240> - <@&1137112100284669995> \n
-                <:ascend:1145405267782156389> - <@&1145404359627264110> \n
-                <:8262_Immortal_Valorant:1075490133496844288> - <@&1137112101467455609> \n
-                <:5979valorantradiant:1139905910081327144> - <@&1137143014989516810>
-            `,
-            image: {
-                url: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/50ca5b2f-036a-4021-95b5-7c0f86d7b9a1/de0tyff-9efba6d3-d8c0-44c9-b25f-9445d45b34ab.png/v1/fit/w_784,h_231,q_70,strp/pick_roles_banner_by_akibanax_de0tyff-414w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjMxIiwicGF0aCI6IlwvZlwvNTBjYTViMmYtMDM2YS00MDIxLTk1YjUtN2MwZjg2ZDdiOWExXC9kZTB0eWZmLTllZmJhNmQzLWQ4YzAtNDRjOS1iMjVmLTk0NDVkNDViMzRhYi5wbmciLCJ3aWR0aCI6Ijw9Nzg0In1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.Vo_m2QbrWPnct4eY6d7ajd0vm-FhOkx1S6MHhVoafrw"
-            }
-        };
+        if(messagerank == ""){
+            const rangválasztó1 = {
+              title: "1. Add meg a jelenlegi valorant rankodat:",
+              description: `
+                  <:Valorant_Iron:1075493415061553234> - <@&1137112102469906583> \n
+                  <:Bronze_Valorant:1075490145312198666> - <@&1137112095968735333> \n
+                  <:Silver_Valorant:1075490140165779577> - <@&1137112096891490375> \n
+                  <:6940_Gold_Valorant:1075490143777075251> - <@&1137112097499656214> \n
+                  <:Platinum_Valorant:1075494339951743049> - <@&1137112098837635153> \n
+                   <:8091_Diamond_Valorant:1075490131580039240> - <@&1137112100284669995> \n
+                   <:ascend:1145405267782156389> - <@&1145404359627264110> \n
+                   <:8262_Immortal_Valorant:1075490133496844288> - <@&1137112101467455609> \n
+                    <:5979valorantradiant:1139905910081327144> - <@&1137143014989516810>
+                `,
+                image: {
+                    url: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/50ca5b2f-036a-4021-95b5-7c0f86d7b9a1/de0tyff-9efba6d3-d8c0-44c9-b25f-9445d45b34ab.png/v1/fit/w_784,h_231,q_70,strp/pick_roles_banner_by_akibanax_de0tyff-414w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjMxIiwicGF0aCI6IlwvZlwvNTBjYTViMmYtMDM2YS00MDIxLTk1YjUtN2MwZjg2ZDdiOWExXC9kZTB0eWZmLTllZmJhNmQzLWQ4YzAtNDRjOS1iMjVmLTk0NDVkNDViMzRhYi5wbmciLCJ3aWR0aCI6Ijw9Nzg0In1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.Vo_m2QbrWPnct4eY6d7ajd0vm-FhOkx1S6MHhVoafrw"
+                }
+            };
 
-        const embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
-
+            const embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
+        }else{
+            const embedMessage = messagerank;
+        }
         // Emoji hozzáadása az üzenethez
         const emojis = [
             'Valorant_Iron', 'Bronze_Valorant', 'Silver_Valorant',
