@@ -44,7 +44,7 @@ client.on("messageCreate", async (message) => {
     if (message.author.bot) {
         return;
     }
-
+    
     const valorant = message.content.split("valorant");
     const ranked = message.content.split("ranked");
     const comp = message.content.split("comp");
@@ -67,6 +67,10 @@ client.on("messageCreate", async (message) => {
             message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
             return;
         }
+    }
+    if (message.content.includes("valorant")){
+        message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
+            return;
     }
 
     const prefix = "=";
