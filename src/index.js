@@ -1,4 +1,5 @@
 require('dotenv').config();
+import {messagerank} from './functions/messagerank.js';
 const registercommandsfile = require('./commands/Other/register-commands.js');
 //nodemon
 const {Client,GatewayIntentBits,Partials,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
@@ -22,8 +23,6 @@ client.on('ready', (c) => {
 
 //commands
 
-let messagerank = "1188867821321601095";
-
 client.on("messageCreate", async (message) => {
     if (message.author.bot) {
         return;
@@ -37,9 +36,7 @@ client.on("messageCreate", async (message) => {
             return;
         }
 
-        //let embedMessage = "";
-
-        //if(messagerank == ""){
+        if(messagerank == ""){
             const rangválasztó1 = {
               title: "1. Add meg a jelenlegi valorant rankodat:",
               description: `
@@ -60,9 +57,10 @@ client.on("messageCreate", async (message) => {
 
             let embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
             console.log(embedMessage);
-        //}else{
-            //let embedMessage = message.content(messagerank);
-        //}
+            messagerank = embedMessage;
+        }else{
+            let embedMessage = messagerank;
+        }
 
         // Emoji hozzáadása az üzenethez
         const emojis = [
