@@ -2,7 +2,6 @@ require('dotenv').config();
 const registercommandsfile = require('./commands/Other/register-commands.js');
 const fs = require("fs");
 const path = require("path");
-const setTimeout = require("timers/promises");
 //nodemon
 const {Client,GatewayIntentBits,Partials,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
 
@@ -50,8 +49,6 @@ client.on("messageCreate", async (message) => {
      || message.content.includes("ranked") && message.channelId == ("1185072726453530664")
      || message.content.includes("comp") && message.channelId == ("1185072726453530664")){
         message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
-        await setTimeout(3000);
-        message.delete();
         return;
     }
 
