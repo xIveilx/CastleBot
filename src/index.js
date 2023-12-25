@@ -52,7 +52,7 @@ client.on("messageCreate", async (message) => {
             return;
         }
         let rawData = fs.readFileSync("./src/functions/messagerank.json");
-        const messagerank = JSON.parse(rawData).messagerank;
+        let messagerank = JSON.parse(rawData).messagerank;
 
         if(isEmpty(messagerank)){
             const rangválasztó1 = {
