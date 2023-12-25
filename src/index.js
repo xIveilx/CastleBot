@@ -51,7 +51,7 @@ client.on("messageCreate", async (message) => {
             message.reply(`nincs jogod ehhez! :D ${message.author.username}`);
             return;
         }
-        let rawData = fs.readFileSync("./functions/messagerank.json");
+        let rawData = fs.readFileSync("./src/functions/messagerank.json");
         const messagerank = JSON.parse(rawData).messagerank;
 
         if(isEmpty(messagerank)){
@@ -76,7 +76,7 @@ client.on("messageCreate", async (message) => {
             let embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
             console.log(embedMessage);
             messagerank = embedMessage;
-            write("./functions/messagerank.json",embedMessage)
+            write("./src/functions/messagerank.json",embedMessage)
         }else{
             let embedMessage = messagerank;
         }
