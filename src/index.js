@@ -50,6 +50,7 @@ client.on("messageCreate", async (message) => {
     for (let i = 0; i < valorant.length; i++) {
         if(valorant[i] == "valorant" || valorant[i] == "ranked" || valorant[i] == "comp"){
             message.reply("igen");
+            return;
         }
     }
 
