@@ -45,6 +45,14 @@ client.on("messageCreate", async (message) => {
         return;
     }
 
+    const valorant = message.content.split(" ");
+
+    for (let i = 0; i < valorant.length; i++) {
+        if(valorant[i] == "valorant"){
+            message.reply("igen");
+        }
+    }
+
     if(message.content.split("valorant") == "valorant"){
         message.reply("igen");
     }
