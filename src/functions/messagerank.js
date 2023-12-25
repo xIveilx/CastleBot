@@ -1,3 +1,0 @@
-let messagerank = [];
-
-export {messagerank};

@@ -1,5 +1,4 @@
-require('dotenv').config();
-import {messagerank} from './functions/messagerank.js';
+require('dotenv').config(); 
 const registercommandsfile = require('./commands/Other/register-commands.js');
 //nodemon
 const {Client,GatewayIntentBits,Partials,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
@@ -14,6 +13,22 @@ const client = new Client({
     ],
     partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
+
+function write(fileName,data) {
+    fs.writeFileSync(path.join(fileName), JSON.stringify(data, null, 2), function writeJSON(err) {
+      if (err) return console.log(err)
+    });
+}
+
+function isEmpty(obj) {
+    for (const prop in obj) {
+      if (Object.hasOwn(obj, prop)) {
+        return false;
+      }
+    }
+  
+    return true;
+}
 
 //Bot elindulás üzenet
 
@@ -35,8 +50,10 @@ client.on("messageCreate", async (message) => {
             message.reply(`nincs jogod ehhez! :D ${message.author.username}`);
             return;
         }
+        let rawData = fs.readFileSync("./functions/messagerank.json");
+        const messagerank = JSON.parse(rawData).messagerank;
 
-        if(messagerank == ""){
+        if(isEmpty(messagerank)){
             const rangválasztó1 = {
               title: "1. Add meg a jelenlegi valorant rankodat:",
               description: `
@@ -58,6 +75,7 @@ client.on("messageCreate", async (message) => {
             let embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
             console.log(embedMessage);
             messagerank = embedMessage;
+            write("./functions/messagerank.json",embedMessage)
         }else{
             let embedMessage = messagerank;
         }
@@ -112,6 +130,8 @@ client.on("messageCreate", async (message) => {
 
     }
 });
+
+
 
 function getRoleIdFromEmojiName(emojiName) {
     const emojiRoleMap = {
