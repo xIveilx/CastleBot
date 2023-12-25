@@ -1,6 +1,5 @@
 require('dotenv').config();
 const registercommandsfile = require('./commands/Other/register-commands.js');
-const messagerankfile = require('./functions/messagerank.js');
 //nodemon
 const {Client,GatewayIntentBits,Partials,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
 
@@ -22,6 +21,8 @@ client.on('ready', (c) => {
 })
 
 //commands
+
+let messagerank = "1188867821321601095";
 
 client.on("messageCreate", async (message) => {
     if (message.author.bot) {
@@ -61,7 +62,7 @@ client.on("messageCreate", async (message) => {
         }else{
             let embedMessage = messagerank;
         }
-        
+
         // Emoji hozzáadása az üzenethez
         const emojis = [
             'Valorant_Iron', 'Bronze_Valorant', 'Silver_Valorant',
