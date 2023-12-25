@@ -51,7 +51,7 @@ client.on("messageCreate", async (message) => {
         if(valorant[i].split("valorant") == "valorant" && message.channelId == ("1185072726453530664")
         || valorant[i].split("ranked") == "ranked" && message.channelId == ("1185072726453530664")
         || valorant[i].split("comp") == "comp" && message.channelId == ("1185072726453530664")){
-            message.reply("A /valorant paranccsal tudsz csapattársakat keresni");
+            message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
             return;
         }
     }
