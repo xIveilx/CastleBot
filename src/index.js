@@ -45,6 +45,10 @@ client.on("messageCreate", async (message) => {
         return;
     }
 
+    if(message.content == "valorant"){
+        message.reply("igen");
+    }
+
     const prefix = "=";
 
     if (message.content.startsWith(prefix + "rangválasztó1")) {
