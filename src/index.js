@@ -48,7 +48,9 @@ client.on("messageCreate", async (message) => {
     const valorant = message.content.split(" ");
 
     for (let i = 0; i < valorant.length; i++) {
-        if(valorant[i] == "valorant" || valorant[i] == "ranked" || valorant[i] == "comp" && message.channelId == ("1185072726453530664")){
+        if(valorant[i].split("valorant") == "valorant" && message.channelId == ("1185072726453530664")
+        || valorant[i].split("ranked") == "ranked" && message.channelId == ("1185072726453530664")
+        || valorant[i].split("comp") == "comp" && message.channelId == ("1185072726453530664")){
             message.reply("A /valorant paranccsal tudsz csapattársakat keresni");
             return;
         }
