@@ -54,6 +54,7 @@ client.on("messageCreate", async (message) => {
         }
         let rawData = fs.readFileSync("./src/functions/messagerank.json");
         let messagerank = JSON.parse(rawData).messagerank;
+        let embedMessage;
 
         if(isEmpty(messagerank)){
             const rangválasztó1 = {
@@ -74,12 +75,12 @@ client.on("messageCreate", async (message) => {
                 }
             };
 
-            let embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
+            embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
             console.log(embedMessage);
             messagerank = embedMessage;
             write("./src/functions/messagerank.json",embedMessage)
         }else{
-            let embedMessage = messagerank;
+            embedMessage = messagerank;
         }
 
         // Emoji hozzáadása az üzenethez
