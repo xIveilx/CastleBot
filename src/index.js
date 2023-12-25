@@ -37,9 +37,9 @@ client.on("messageCreate", async (message) => {
             return;
         }
 
-        let embedMessage = "";
+        //let embedMessage = "";
 
-        if(messagerank == ""){
+        //if(messagerank == ""){
             const rangválasztó1 = {
               title: "1. Add meg a jelenlegi valorant rankodat:",
               description: `
@@ -59,9 +59,9 @@ client.on("messageCreate", async (message) => {
             };
 
             let embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
-        }else{
-            let embedMessage = message.content(messagerank);
-        }
+        //}else{
+            //let embedMessage = message.content(messagerank);
+        //}
 
         // Emoji hozzáadása az üzenethez
         const emojis = [
