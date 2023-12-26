@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs')
 const {REST,Routes,ApplicationCommandOptionType, ApplicationCommandType} = require('discord.js');
 
 const commands = [
@@ -102,22 +103,28 @@ const commands = [
 
 const rest = new REST({version:'10'}).setToken(process.env.TOKEN);
 
-(async  () => {
-    try {
-        console.log("perjeles parancsok regisztrálása...");
-
-        await rest.put(
-            Routes.applicationGuildCommands(
-                process.env.CLIENT_ID,
-                process.env.GUILD_ID
-            ),
-            {
-                body: commands
-            }
-        );
-
-    console.log("perjeles parancsok sikeresek regisztrálva!");
-    } catch (error) {
-        console.log(`Van egy hiba: ${error}`);
+module.exports = {
+    run: async  () => {
+        try {
+            console.log("perjeles parancsok regisztrálása...");
+            const config = JSON.parse(fs.readFileSync("./data/config.json"));
+    
+            await rest.put(
+                Routes.applicationGuildCommands(
+                    config.client,
+                    config.guild
+                ),
+                {
+                    body: commands
+                }
+            );
+    
+        console.log("perjeles parancsok sikeresek regisztrálva!");
+        } catch (error) {
+            console.log(`Van egy hiba: ${error}`);
+        }
+    },
+    help: {
+        name: ("register-slash-commands")
     }
-})();
+}

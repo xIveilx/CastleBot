@@ -1,104 +1,97 @@
-require('dotenv').config(); 
-const config = require("./data/config.json");
-const configMap = new Map(Object.entries(config));
-const registercommandsfile = require('./commands/Other/register-commands.js');
+// IMPORTS
+require('dotenv').config();
 const fs = require("fs");
-const path = require("path");
-//nodemon
 const discord = require("discord.js");
-const glob = require("glob");
+const {
+    glob,
+} = require("glob");
+
+// GLOBAL VARIABLES
 let guildID;
 
-configMap.get(x).map(y => {
-    guildID = y.guild;
-});
+// LOAD CONFIG FILE
+const config = JSON.parse(fs.readFileSync("./data/config.json"));
+guildID = config.guild;
 
-
-const client = new  discord.Client({
-    intents: [
-        "GUILDS",
-        "GUILD_MEMBERS",
-        "GUILD_MESSAGES",
-        "MESSAGE_CONTENT",
-        "GUILD_MESSAGE_REACTIONS",
-    ],
+// SETUP
+const client = new discord.Client({
     partials: [
-        "MESSAGE",
-        "CHANNEL", 
-        "REACTION",
+        discord.IntentsBitField.Message,
+        discord.IntentsBitField.Channel, 
+        discord.IntentsBitField.Reaction,
+    ],
+    intents: [
+        discord.GatewayIntentBits.Guilds,
+		discord.GatewayIntentBits.GuildMessages,
+		discord.GatewayIntentBits.MessageContent,
+		discord.GatewayIntentBits.GuildMembers,
     ],
 });
 
 client.commands = new discord.Collection();
+client.automatedFunctions = new discord.Collection();
 
-function write(fileName,data) {
-    fs.writeFileSync(path.join(fileName), JSON.stringify(data, null, 2), function writeJSON(err) {
-      if (err) return console.log(err)
-    });
-}
-
-function isEmpty(obj) {
-    for (const prop in obj) {
-      if (Object.hasOwn(obj, prop)) {
-        return false;
-      }
-    }
-  
-    return true;
-}
 
 async function getFunctions(path, collection, description) {
-    return new Promise(function(resolve, reject) {
-      const getDirectories = (src, callback) => {
-        glob(src + '/**/*', callback);
+    return new Promise(async function(resolve, reject) {
+      const getDirectories = async (src, callback) => {
+        const gl = await glob(src + '/**/*');
+        callback(gl)
       }
   
-      getDirectories(path, (err, res) => {
-        if (err) {
-          console.log(`Error:\n${err}`);
-        }
-        else {
-          //Only get files with the extension .js
-          let jsFiles = res.filter(f => f.split('.').pop() == ('js'))
-          //If no .js files
-          if (jsFiles.length <= 0) {
+      await getDirectories(path, async (res) => {
+        //Only get files with the extension .js
+        let jsFiles = res.filter(f => f.split('.').pop() == ('js'))
+        //If no .js files
+        if (jsFiles.length <= 0) {
             console.log(`\n\nNo ${description} to load!`);
+            resolve()
             return;
-          }
-  
-          console.log(`\n\n── Loading ${jsFiles.length} ${description}! ──`);
-          jsFiles.forEach((item, i) => {
+        }
+
+        console.log(`\n\n── Loading ${jsFiles.length} ${description}! ──`);
+        await jsFiles.forEach((item, i) => {
             //Load
             let props = require(`./${item}`)
             console.log(`[${i+1}] ${item} loaded. Name: ${props.help.name}`)
-  
-            //Add to collection
-            resolve(collection.set(props.help.name, props));
-          })
-        }
+            collection.set(props.help.name, props)
+        })
+
+        resolve();
       })
     })
 }
 
-//Bot elindulás üzenet
-
+// BOT READY
 client.on('ready', async (c) => {
-    const guild = await client.guilds.cache.get(guildID);
-    await getFunctions('src/Commands/Other', client.commands, 'commands');
-    console.log(` ${c.user.tag} Elindult! :3`);
+    await getFunctions('bot_modules/commands', client.commands, 'commands');
+    await getFunctions('bot_modules/automated_commands', client.automatedFunctions, 'automated functions');
+    // Register slash commands AFTER bot has signaled ready
+    client.automatedFunctions.get('register-slash-commands').run()
+    // Check for DB
+    client.automatedFunctions.get('check-db').run()
+
+    console.log(`${c.user.tag} Elindult! :3`);
 })
 
-//commands
+// REACTION
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (!reaction) return
+    client.automatedFunctions.get("reaction-handler").run(reaction,user);
+});
+
 
 client.on("messageCreate", async (message) => {
     if (message.author.bot) {
         return;
     }
 
-    if (message.content.includes("valorant") && message.channelId == ("1137112266123255889")
-     || message.content.includes("ranked") && message.channelId == ("1137112266123255889")
-     || message.content.includes("comp") && message.channelId == ("1137112266123255889")){
-        message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
+    if ((message.content.includes("valorant") || message.content.includes("ranked") || message.content.includes("comp"))
+        && message.channelId == ("1137112266123255889")) {
+        message.reply({
+            content: "A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!",
+            ephemeral: true
+        });
         return;
     }
 
@@ -160,59 +153,8 @@ client.on("messageCreate", async (message) => {
                 console.error(`Emoji not found: ${item}`);
             }
         })
-
-        // Várakozás a reakciókra és azonnali rang hozzáadása vagy eltávolítása
-        const collectorFilter = (reaction, user) => emojis.includes(reaction.emoji.name) && user.id === message.author.id;
-        const collector = embedMessage.createReactionCollector({ filter: collectorFilter })
-
-        collector.on('collect', async (reaction, user) => {
-            const roleId = getRoleIdFromEmojiName(reaction.emoji.name);
-
-            if (roleId) {
-                const member = message.guild.members.cache.get(message.author.id);
-                
-                await reaction.users.remove(message.author.id);
-
-                if (member.roles.cache.has(roleId)) {
-                    // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
-                    await member.roles.remove(roleId);
-                    message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
-                    console.log("rang eltávolitva");
-                } else {
-                    // Felhasználó még nem rendelkezik a ranggal, adjuk hozzá
-                    emojis.forEach((name) => {
-                        const id = getRoleIdFromEmojiName(name)
-                        if (id) {
-                            member.roles.remove(id)
-                        }
-                    })
-                    await member.roles.add(roleId);
-                    message.channel.send(`Rang hozzáadva: <@&${roleId}>`);
-                    console.log("rang hozzáadva");
-                }
-            }
-        })
-
     }
 });
-
-
-
-function getRoleIdFromEmojiName(emojiName) {
-    const emojiRoleMap = {
-        'Valorant_Iron': '1137112102469906583', // Valorant_Iron
-        'Bronze_Valorant': '1137112095968735333', // Bronze_Valorant
-        'Silver_Valorant': '1137112096891490375', // Silver_Valorant
-        '6940_Gold_Valorant': '1137112097499656214', // 6940_Gold_Valorant
-        'Platinum_Valorant': '1137112098837635153', // Platinum_Valorant
-        '8091_Diamond_Valorant': '1137112100284669995', // 8091_Diamond_Valorant
-        'ascend': '1145404359627264110', // ascend
-        '8262_Immortal_Valorant': '1137112101467455609', // 8262_Immortal_Valorant
-        '5979valorantradiant': '1137143014989516810'  // 5979valorantradiant
-    };
-
-    return emojiRoleMap[emojiName] || null;
-}
 
 //interakciok
 client.on('interactionCreate', (interaction) => {
@@ -382,6 +324,29 @@ client.on('interactionCreate', async (interaction) => {
     } catch (error) {
         console.log(error);
     }
+});
+
+//partial reactions handler
+client.on('raw', packet => {
+    //Don't want this to run on unrelated packets
+    if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(packet.t)) return;
+    //Grab channel
+    const channel = client.channels.cache.get(packet.d.channel_id);
+    //If reaction is already cached, return
+    if (channel.messages.cache.has(packet.d.message_id)) return;
+    //Fetch message
+    channel.messages.fetch(packet.d.message_id).then(message => {
+      const emoji = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
+      const reaction = message.reactions.cache.get(emoji);
+      if (reaction) reaction.users.cache.set(packet.d.user_id, client.users.cache.get(packet.d.user_id));
+  
+      if (packet.t === 'MESSAGE_REACTION_ADD') {
+        client.emit('messageReactionAdd', reaction, client.users.cache.get(packet.d.user_id));
+      }
+      if (packet.t === 'MESSAGE_REACTION_REMOVE') {
+        client.emit('messageReactionRemove', reaction, client.users.cache.get(packet.d.user_id));
+      }
+    });
 });
 
 //Token
