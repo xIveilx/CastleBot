@@ -45,9 +45,9 @@ client.on("messageCreate", async (message) => {
         return;
     }
 
-    if (message.content.includes("valorant") && message.channelId == ("1185072726453530664")
-     || message.content.includes("ranked") && message.channelId == ("1185072726453530664")
-     || message.content.includes("comp") && message.channelId == ("1185072726453530664")){
+    if (message.content.includes("valorant") && message.channelId == ("1137112266123255889")
+     || message.content.includes("ranked") && message.channelId == ("1137112266123255889")
+     || message.content.includes("comp") && message.channelId == ("1137112266123255889")){
         message.reply("A /valorant paranccsal tudsz egy látványosabb csapatkeresést megjeleníteni, így biztos könnyebben észrevesznek az új csapattársak!");
         return;
     }
