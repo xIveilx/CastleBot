@@ -1,20 +1,35 @@
 require('dotenv').config(); 
+const config = require("./data/config.json");
+const configMap = new Map(Object.entries(config));
 const registercommandsfile = require('./commands/Other/register-commands.js');
 const fs = require("fs");
 const path = require("path");
 //nodemon
-const {Client,GatewayIntentBits,Partials,EmbedBuilder, Guild, User, Message, BaseInteraction, Role} = require('discord.js');
+const discord = require("discord.js");
+const glob = require("glob");
+let guildID;
 
-const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMessageReactions,
-    ],
-    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+configMap.get(x).map(y => {
+    guildID = y.guild;
 });
+
+
+const client = new  discord.Client({
+    intents: [
+        "GUILDS",
+        "GUILD_MEMBERS",
+        "GUILD_MESSAGES",
+        "MESSAGE_CONTENT",
+        "GUILD_MESSAGE_REACTIONS",
+    ],
+    partials: [
+        "MESSAGE",
+        "CHANNEL", 
+        "REACTION",
+    ],
+});
+
+client.commands = new discord.Collection();
 
 function write(fileName,data) {
     fs.writeFileSync(path.join(fileName), JSON.stringify(data, null, 2), function writeJSON(err) {
@@ -32,9 +47,44 @@ function isEmpty(obj) {
     return true;
 }
 
+async function getFunctions(path, collection, description) {
+    return new Promise(function(resolve, reject) {
+      const getDirectories = (src, callback) => {
+        glob(src + '/**/*', callback);
+      }
+  
+      getDirectories(path, (err, res) => {
+        if (err) {
+          console.log(`Error:\n${err}`);
+        }
+        else {
+          //Only get files with the extension .js
+          let jsFiles = res.filter(f => f.split('.').pop() == ('js'))
+          //If no .js files
+          if (jsFiles.length <= 0) {
+            console.log(`\n\nNo ${description} to load!`);
+            return;
+          }
+  
+          console.log(`\n\n── Loading ${jsFiles.length} ${description}! ──`);
+          jsFiles.forEach((item, i) => {
+            //Load
+            let props = require(`./${item}`)
+            console.log(`[${i+1}] ${item} loaded. Name: ${props.help.name}`)
+  
+            //Add to collection
+            resolve(collection.set(props.help.name, props));
+          })
+        }
+      })
+    })
+}
+
 //Bot elindulás üzenet
 
-client.on('ready', (c) => {
+client.on('ready', async (c) => {
+    const guild = await client.guilds.cache.get(guildID);
+    await getFunctions('src/Commands/Other', client.commands, 'commands');
     console.log(` ${c.user.tag} Elindult! :3`);
 })
 
