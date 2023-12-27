@@ -5,7 +5,6 @@ module.exports = {
     run: async () => {
         const original = {
             roleMsg: "",
-            channelId: "",
         }
 
 
