@@ -23,11 +23,11 @@ module.exports = {
 
             const roleId = getRoleIdFromEmojiName(reaction.emoji.name);
             if (roleId) {                
-                console.log(user)
                 await reaction.users.remove(user.id);
-                if (user.roles.has(roleId)) {
+                const member = await reaction.message.guild.members.cache.get(user.id);
+                if (member.roles.has(roleId)) {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
-                    await user.roles.remove(roleId);
+                    await member.roles.remove(roleId);
                     reaction.message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
                     console.log("rang eltávolitva");
                 } else {
@@ -35,10 +35,10 @@ module.exports = {
                     emojis.forEach((name) => {
                         const id = getRoleIdFromEmojiName(name)
                         if (id) {
-                            user.roles.remove(id)
+                            member.roles.remove(id)
                         }
                     })
-                    await user.roles.add(roleId);
+                    await member.roles.add(roleId);
                     reaction.message.channel.send(`Rang hozzáadva: <@&${roleId}>`);
                     console.log("rang hozzáadva");
                 }
