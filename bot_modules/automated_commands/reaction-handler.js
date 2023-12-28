@@ -16,6 +16,9 @@ module.exports = {
                 'ascend', '8262_Immortal_Valorant', '5979valorantradiant'
             ];
 
+            console.log(reaction.name)
+            console.log(emojis.includes(reaction.name))
+            console.log(reaction)
             if (!emojis.includes(reaction.name)) {
                 await reaction.users.remove(user.id)
                 return
