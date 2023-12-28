@@ -6,8 +6,10 @@ module.exports = {
 
         const rawData = fs.readFileSync("./data/database.json");
         const db = JSON.parse(rawData)
+        console.log(db)
         // FOUND MSG ID
         if (db.roleMsg) {
+            console.log(reaction.message.id != parseInt(db.roleMsg))
             if (reaction.message.id != parseInt(db.roleMsg)) return
 
             const emojis = [
