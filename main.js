@@ -215,7 +215,7 @@ client.on('interactionCreate', (interaction) => {
                 color = "White";
             break;
         }
-        const beágyazásrank = new EmbedBuilder()
+        const beágyazásrank = new discord.EmbedBuilder()
         .setAuthor({
             name: `${interaction.user.tag}`,
             iconURL: `${interaction.user.avatarURL()}`,
@@ -256,7 +256,7 @@ client.on('interactionCreate', (interaction) => {
             interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
             return;
         }
-        const beágyazás = new EmbedBuilder()
+        const beágyazás = new discord.EmbedBuilder()
         .setTitle("beágyazás cím")
         .setDescription("Ez egy beágyazás leírás.")
         .setColor("Purple")
