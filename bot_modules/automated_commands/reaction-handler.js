@@ -28,7 +28,6 @@ module.exports = {
                 if (member._roles.includes(roleId)) {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
                     await member.roles.remove(roleId);
-                    reaction.message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
                 } else {
                     // Felhasználó még nem rendelkezik a ranggal, adjuk hozzá
                     emojis.forEach((name) => {
@@ -38,7 +37,6 @@ module.exports = {
                         }
                     })
                     await member.roles.add(roleId);
-                    reaction.message.channel.send(`Rang hozzáadva: <@&${roleId}>`);
                 }
             }
         }
