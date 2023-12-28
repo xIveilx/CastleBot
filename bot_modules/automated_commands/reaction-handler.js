@@ -16,10 +16,7 @@ module.exports = {
                 'ascend', '8262_Immortal_Valorant', '5979valorantradiant'
             ];
 
-            console.log(reaction.name)
-            console.log(emojis.includes(reaction.name))
-            console.log(reaction)
-            if (!emojis.includes(reaction.name)) {
+            if (!emojis.includes(reaction.emoji.name)) {
                 await reaction.users.remove(user.id)
                 return
             }
@@ -27,8 +24,6 @@ module.exports = {
             const roleId = getRoleIdFromEmojiName(reaction.emoji.name);
             if (roleId) {                
                 await reaction.users.remove(user.id);
-                console.log(user)
-                console.log(user.roles)
                 if (user.roles.cache.has(roleId)) {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
                     await user.roles.remove(roleId);
