@@ -2,11 +2,13 @@ const fs = require('fs')
 
 module.exports = {
     run: async (reaction, user) => {
+        if (user.bot) return;
+
         const rawData = fs.readFileSync("./data/database.json");
         const db = JSON.parse(rawData)
         // FOUND MSG ID
         if (db.roleMsg) {
-            if (reaction.message.id != db.roleMsg) return
+            if (reaction.message.id != parseInt(db.roleMsg)) return
 
             const emojis = [
                 'Valorant_Iron', 'Bronze_Valorant', 'Silver_Valorant',
