@@ -23,8 +23,9 @@ module.exports = {
 
             const roleId = getRoleIdFromEmojiName(reaction.emoji.name);
             if (roleId) {                
+                console.log(user)
                 await reaction.users.remove(user.id);
-                if (user.roles.cache.has(roleId)) {
+                if (user.roles.has(roleId)) {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
                     await user.roles.remove(roleId);
                     reaction.message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
