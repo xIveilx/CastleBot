@@ -5,6 +5,7 @@ const discord = require("discord.js");
 const {
     glob,
 } = require("glob");
+const utils = require('./bot_modules/utils');
 
 // GLOBAL VARIABLES
 let guildID;
