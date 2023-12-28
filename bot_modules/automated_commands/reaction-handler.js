@@ -25,12 +25,10 @@ module.exports = {
             if (roleId) {                
                 await reaction.users.remove(user.id);
                 const member = await reaction.message.guild.members.cache.get(user.id);
-                console.log(member._roles)
                 if (member._roles.includes(roleId)) {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
                     await member.roles.remove(roleId);
                     reaction.message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
-                    console.log("rang eltávolitva");
                 } else {
                     // Felhasználó még nem rendelkezik a ranggal, adjuk hozzá
                     emojis.forEach((name) => {
@@ -41,7 +39,6 @@ module.exports = {
                     })
                     await member.roles.add(roleId);
                     reaction.message.channel.send(`Rang hozzáadva: <@&${roleId}>`);
-                    console.log("rang hozzáadva");
                 }
             }
         }
