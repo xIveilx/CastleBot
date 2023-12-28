@@ -28,6 +28,10 @@ module.exports = {
                 if (member._roles.includes(roleId)) {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
                     await member.roles.remove(roleId);
+                    reaction.reply({
+                        content: `Rang eltávolítva: <@&${roleId}>`,
+                        ephemeral: true
+                    });
                 } else {
                     // Felhasználó még nem rendelkezik a ranggal, adjuk hozzá
                     emojis.forEach((name) => {
@@ -37,6 +41,10 @@ module.exports = {
                         }
                     })
                     await member.roles.add(roleId);
+                    reaction.reply({
+                        content: `Rang hozzáadva: <@&${roleId}>`,
+                        ephemeral: true
+                    });
                 }
             }
         }
