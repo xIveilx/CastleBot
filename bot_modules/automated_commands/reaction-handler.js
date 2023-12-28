@@ -6,10 +6,8 @@ module.exports = {
 
         const rawData = fs.readFileSync("./data/database.json");
         const db = JSON.parse(rawData)
-        console.log(db)
         // FOUND MSG ID
         if (db.roleMsg) {
-            console.log(reaction.message.id != parseInt(db.roleMsg))
             if (reaction.message.id != parseInt(db.roleMsg)) return
 
             const emojis = [
@@ -19,17 +17,17 @@ module.exports = {
             ];
 
             if (!emojis.includes(reaction.name)) {
-                await reaction.users.remove(message.author.id)
+                await reaction.users.remove(user.id)
                 return
             }
 
             const roleId = getRoleIdFromEmojiName(reaction.emoji.name);
             if (roleId) {                
-                await reaction.users.remove(message.author.id);
+                await reaction.users.remove(user.id);
                 if (user.roles.cache.has(roleId)) {
                     // Felhasználó már rendelkezik a ranggal, távolítsuk el a reakcióját
                     await user.roles.remove(roleId);
-                    message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
+                    reaction.message.channel.send(`Rang eltávolítva: <@&${roleId}>`);
                     console.log("rang eltávolitva");
                 } else {
                     // Felhasználó még nem rendelkezik a ranggal, adjuk hozzá
@@ -40,7 +38,7 @@ module.exports = {
                         }
                     })
                     await user.roles.add(roleId);
-                    message.channel.send(`Rang hozzáadva: <@&${roleId}>`);
+                    reaction.message.channel.send(`Rang hozzáadva: <@&${roleId}>`);
                     console.log("rang hozzáadva");
                 }
             }
