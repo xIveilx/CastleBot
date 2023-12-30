@@ -150,23 +150,7 @@ client.on("messageCreate", async (message) => {
 //interakciok
 client.on('interactionCreate', (interaction) => {
     if(!interaction.isChatInputCommand()) return;
-    //hey
-    if(interaction.commandName == 'hey'){
-        if (!interaction.member.roles.cache.has('1186234636163092500')) {
-            interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
-            return;
-        }
-        interaction.reply('<a:DBE_accepted:1160635848740573326>');
-    }
-    //ping
-    if(interaction.commandName == 'ping'){
-        if (!interaction.member.roles.cache.has('1186234636163092500')) {
-            interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
-            return;
-        }
-        interaction.reply('pong!');
-    }
-    //2 szám összeadása
+    //Valorant csapatkeresés
     if((interaction.commandName == 'valorant') && interaction.channelId === '1137112266123255889' || interaction.channelId === '1185072726453530664'){
         //if (!interaction.member.roles.cache.has('1186234636163092500')) {
         //    interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
