@@ -70,6 +70,11 @@ let status = [
         name: 'Gaming & Chill',
         type: ActivityType.Streaming,
         url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    },
+    {
+        name: 'Gaming & Chill',
+        type: ActivityType.Listening,
+        url: 'https://open.spotify.com/track/75zbw2JGazrTzrJ5r36Af3?si=b77c08d8f96243ad',
     }
 ]
 
