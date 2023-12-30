@@ -6,6 +6,7 @@ const {
     glob,
 } = require("glob");
 const utils = require('./bot_modules/utils');
+const { send } = require('process');
 
 // GLOBAL VARIABLES
 let guildID;
@@ -13,7 +14,6 @@ let guildID;
 // LOAD CONFIG FILE
 const config = JSON.parse(fs.readFileSync("./data/config.json"));
 guildID = config.guild;
-
 // SETUP
 const client = new discord.Client({
     partials: [
@@ -35,33 +35,33 @@ client.automatedFunctions = new discord.Collection();
 
 
 async function getFunctions(path, collection, description) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function(resolve) {
       const getDirectories = async (src, callback) => {
         const gl = await glob(src + '/**/*');
-        callback(gl)
-      }
+        callback(gl);
+      };
   
       await getDirectories(path, async (res) => {
         //Only get files with the extension .js
-        let jsFiles = res.filter(f => f.split('.').pop() == ('js'))
+        let jsFiles = res.filter(f => f.split('.').pop() == ('js'));
         //If no .js files
         if (jsFiles.length <= 0) {
             console.log(`\n\nNo ${description} to load!`);
-            resolve()
+            resolve();
             return;
         }
 
         console.log(`\n\n── Loading ${jsFiles.length} ${description}! ──`);
         await jsFiles.forEach((item, i) => {
             //Load
-            let props = require(`./${item}`)
-            console.log(`[${i+1}] ${item} loaded. Name: ${props.help.name}`)
-            collection.set(props.help.name, props)
-        })
+            let props = require(`./${item}`);
+            console.log(`[${i+1}] ${item} loaded. Name: ${props.help.name}`);
+            collection.set(props.help.name, props);
+        });
 
         resolve();
-      })
-    })
+      });
+    });
 }
 
 // BOT READY
@@ -69,16 +69,16 @@ client.on('ready', async (c) => {
     await getFunctions('bot_modules/commands', client.commands, 'commands');
     await getFunctions('bot_modules/automated_commands', client.automatedFunctions, 'automated functions');
     // Register slash commands AFTER bot has signaled ready
-    client.automatedFunctions.get('register-slash-commands').run()
+    client.automatedFunctions.get('register-slash-commands').run();
     // Check for DB
-    client.automatedFunctions.get('check-db').run()
+    client.automatedFunctions.get('check-db').run();
 
     console.log(`${c.user.tag} Elindult! :3`);
-})
+});
 
 // REACTION
 client.on('messageReactionAdd', async (reaction, user) => {
-    if (!reaction) return
+    if (!reaction) return;
     client.automatedFunctions.get("reaction-handler").run(reaction,user);
 });
 
@@ -123,11 +123,11 @@ client.on("messageCreate", async (message) => {
             }
         };
 
-        embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
+        const embedMessage = await message.channel.send({ embeds: [rangválasztó1] });
         const data = {
             roleMsg: embedMessage.id,
         };
-        utils.write('./data/database.json', data)
+        utils.write('./data/database.json', data);
 
         // Emoji hozzáadása az üzenethez
         const emojis = [
@@ -143,7 +143,7 @@ client.on("messageCreate", async (message) => {
             } else {
                 console.error(`Emoji not found: ${item}`);
             }
-        })
+        });
     }
 });
 
@@ -166,8 +166,8 @@ client.on('interactionCreate', (interaction) => {
         }
         interaction.reply('pong!');
     }
-    //Valorant csapatkereses
-    if((interaction.commandName == 'valorant') && interaction.channelId === '1137112266123255889' || interaction.channelId === '1185072726453530664'){
+    //2 szám összeadása
+    if(interaction.commandName == 'valorant' && interaction.channelId === '1137112266123255889'){
         //if (!interaction.member.roles.cache.has('1186234636163092500')) {
         //    interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
         //    return;
@@ -247,14 +247,12 @@ client.on('interactionCreate', (interaction) => {
         .setFooter({
             text: "/valorant parancsal tudsz csapatot keresni",
         });
-
         const sendMessage = new discord.ButtonBuilder()
         .setStyle(discord.ButtonStyle.Primary)
         .setLabel("Send Message")
         .setCustomId(`sendmsg_${interaction.user.id}`);
         const row = new discord.ActionRowBuilder()
         .addComponents(sendMessage);
-
         interaction.reply({
             embeds: [beágyazásrank],
             components: [row]
@@ -295,35 +293,54 @@ client.on('interactionCreate', (interaction) => {
 });
 
 client.on('interactionCreate', async (interaction) => {
+    //szín választó
     try{
-        if(!interaction.isButton()) return;
-        if(interaction.customId === "sendmsg"){
-            if(interaction.customId.split("_")[1] === interaction.user.id){
-                return interaction.reply({content: "You can't send yourself a message.", ephemeral: true});
-            }
-            const modal = new discord.ModalBuilder()
-                .setCustomId('msgmodal')
-                .setTitle('Send someone a message');
-            const msgBuilder = new discord.TextInputBuilder()
-                .setCustomId('custommsg')
-                .setLabel("What message would you like to send?")
-                .setStyle(discord.TextInputStyle.Paragraph)
-                .setPlaceholder('Enter some cool text!');
-                const modalRow = new discord.ActionRowBuilder().addComponents(msgBuilder);
-                modal.addComponents(modalRow);
-    
-            await interaction.showModal(modal);
-        
-        }else {
-        await interaction.deferReply({
-            ephemeral: true,
+    if(!interaction.isButton()) return;
+    if(interaction.customId === "sendmsg"){
+        if(interaction.customId.split("_")[1] === interaction.user.id){
+            return interaction.reply({content: "You can't send yourself a message.", ephemeral: true});
+        }
+        const modal = new discord.ModalBuilder()
+			.setCustomId('msgmodal')
+			.setTitle('Send someone a message');
+        const msgBuilder = new discord.TextInputBuilder()
+			.setCustomId('custommsg')
+			.setLabel("What message would you like to send?")
+			.setStyle(discord.TextInputStyle.Paragraph)
+            .setPlaceholder('Enter some cool text!');
+            const modalRow = new discord.ActionRowBuilder().addComponents(msgBuilder);
+            modal.addComponents(modalRow);
+
+		await interaction.showModal(modal);
+	
+    }else {
+    await interaction.deferReply({
+        ephemeral: true,
+    });
+
+    const role = interaction.guild.roles.cache.get(interaction.customId);
+    if(!role){
+        interaction.editReply({
+            content: "Nem találtam meg ez a rangot.",
         });
+        return;
     }
-    }catch (error) {
+
+    const hasrole = interaction.member.roles.cache.has(role.id);
+
+    if(hasrole){
+        await interaction.member.roles.remove(role);
+        await interaction.editReply(`A ${role} szín törölve lett a rangjaid közül.`);
+        return;
+    }
+
+    await interaction.member.roles.add(role);
+    await interaction.editReply(`A ${role} szín hozzá lett adva a rangodhoz.`);
+}
+    } catch (error) {
         console.log(error);
     }
 });
-
 client.on('interactionCreate', async (interaction) => {
 
     if(!interaction.isModalSubmit()) return;
@@ -332,6 +349,7 @@ client.on('interactionCreate', async (interaction) => {
     const user = await interaction.guild.users.fetch(userId);
     user.send(textmsg);
     interaction.reply({content: "Successfully sent them a message.", ephemeral: true});
+   
 });
 //partial reactions handler
 client.on('raw', packet => {
