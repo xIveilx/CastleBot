@@ -7,6 +7,7 @@ const {
 } = require("glob");
 const utils = require('./bot_modules/utils');
 const { send } = require('process');
+const {ActivityType} = require("discord.js");
 
 // GLOBAL VARIABLES
 let guildID;
@@ -74,6 +75,10 @@ client.on('ready', async (c) => {
     client.automatedFunctions.get('check-db').run();
 
     console.log(`${c.user.tag} Elindult! :3`);
+
+    client.user.setActivity({
+        name: 'Chill Zone',
+    })
 });
 
 // REACTION
