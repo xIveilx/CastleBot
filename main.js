@@ -248,6 +248,13 @@ client.on('interactionCreate', (interaction) => {
             text: "/valorant parancsal tudsz csapatot keresni",
         });
 
+        const sendMessage = new discord.ButtonBuilder()
+        .setStyle(discord.ButtonStyle.Primary)
+        .setLabel("Send Message")
+        .setCustomId(`sendmsg_${interaction.user.id}`);
+        const row = new discord.ActionRowBuilder()
+        .addComponents(sendMessage);
+        
         interaction.reply({
             embeds: [beágyazásrank]
         });
