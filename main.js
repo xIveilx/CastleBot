@@ -65,6 +65,14 @@ async function getFunctions(path, collection, description) {
     });
 }
 
+let status = [
+    {
+        name: 'Gaming & Chill',
+        type: ActivityType.Streaming,
+        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    }
+]
+
 // BOT READY
 client.on('ready', async (c) => {
     await getFunctions('bot_modules/commands', client.commands, 'commands');
@@ -76,11 +84,10 @@ client.on('ready', async (c) => {
 
     console.log(`${c.user.tag} Elindult! :3`);
 
-    client.user.setActivity({
-        name: 'Chill Zone',
-        type: ActivityType.Streaming,
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-    })
+    setInterval(() => {
+        let random = Math.floor(Math.random() * status.length);
+        client.user.SetActivity(status[random]);
+    }, 10000);
 });
 
 // REACTION
