@@ -91,7 +91,7 @@ client.on('ready', async (c) => {
 
     setInterval(() => {
         let random = Math.floor(Math.random() * status.length);
-        client.user.SetActivity(status[random]);
+        client.user.setActivity(status[random]);
     }, 10000);
 });
 
