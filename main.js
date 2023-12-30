@@ -254,9 +254,10 @@ client.on('interactionCreate', (interaction) => {
         .setCustomId(`sendmsg_${interaction.user.id}`);
         const row = new discord.ActionRowBuilder()
         .addComponents(sendMessage);
-        
+
         interaction.reply({
-            embeds: [beágyazásrank]
+            embeds: [beágyazásrank],
+            components: [row]
         });
     }
     //beágyazás
