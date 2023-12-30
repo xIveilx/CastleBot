@@ -346,7 +346,7 @@ client.on('interactionCreate', async (interaction) => {
     if(!interaction.isModalSubmit()) return;
     const textmsg = interaction.fields.getTextInputValue('custommsg');
     const userId = interaction.message.components[0].components[0].data.custom_id.split("_")[1];
-    const user = await interaction.guild.users.fetch(userId);
+    const user = await interaction.guild.members.fetch(userId);
     user.send(`**Message from ${interaction.user}**\n\n${textmsg}`);
     interaction.reply({content: "Successfully sent them a message.", ephemeral: true});
    
