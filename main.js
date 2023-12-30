@@ -249,7 +249,7 @@ client.on('interactionCreate', (interaction) => {
         });
         const sendMessage = new discord.ButtonBuilder()
         .setStyle(discord.ButtonStyle.Primary)
-        .setLabel("Send Message")
+        .setLabel("Üzenet küldése")
         .setCustomId(`sendmsg_${interaction.user.id}`);
         const row = new discord.ActionRowBuilder()
         .addComponents(sendMessage);
@@ -258,56 +258,24 @@ client.on('interactionCreate', (interaction) => {
             components: [row]
         });
     }
-    //beágyazás
-    if(interaction.commandName == 'beágyazás'){
-        if (!interaction.member.roles.cache.has('1186234636163092500')) {
-            interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
-            return;
-        }
-        const beágyazás = new discord.EmbedBuilder()
-        .setTitle("beágyazás cím")
-        .setDescription("Ez egy beágyazás leírás.")
-        .setColor("Purple")
-        .setFields({
-            name: 'Játékmód:',
-            value: 'valami.',
-            inline: true,
-        },
-        {
-            name: 'Rank:',
-            value: 'valami.',
-            inline: true,
-        },
-        {
-            name: 'lobby:',
-            value: 'valami.',
-            inline: true,
-        },
-        );
-        
-
-        interaction.reply({
-            embeds: [beágyazás]
-        });
-    }
 });
 
 client.on('interactionCreate', async (interaction) => {
-    //szín választó
+    //Üzenet küldő
     try{
     if(!interaction.isButton()) return;
     if(interaction.customId.startsWith("sendmsg")){
         if(interaction.customId.split("_")[1] === interaction.user.id){
-            return interaction.reply({content: "You can't send yourself a message.", ephemeral: true});
+            return interaction.reply({content: "Magadnak nem küldhetsz üzenetet!", ephemeral: true});
         }
         const modal = new discord.ModalBuilder()
 			.setCustomId('msgmodal')
-			.setTitle('Send someone a message');
+			.setTitle('Küldj üzenetet másnak!');
         const msgBuilder = new discord.TextInputBuilder()
 			.setCustomId('custommsg')
-			.setLabel("What message would you like to send?")
+			.setLabel("Milyen üzenetet szeretnél küldeni?")
 			.setStyle(discord.TextInputStyle.Paragraph)
-            .setPlaceholder('Enter some cool text!');
+            .setPlaceholder('Ide írd az üzenetet amit szeretnél küldeni :3');
             const modalRow = new discord.ActionRowBuilder().addComponents(msgBuilder);
             modal.addComponents(modalRow);
 
@@ -317,26 +285,7 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.deferReply({
         ephemeral: true,
     });
-
-    const role = interaction.guild.roles.cache.get(interaction.customId);
-    if(!role){
-        interaction.editReply({
-            content: "Nem találtam meg ez a rangot.",
-        });
-        return;
     }
-
-    const hasrole = interaction.member.roles.cache.has(role.id);
-
-    if(hasrole){
-        await interaction.member.roles.remove(role);
-        await interaction.editReply(`A ${role} szín törölve lett a rangjaid közül.`);
-        return;
-    }
-
-    await interaction.member.roles.add(role);
-    await interaction.editReply(`A ${role} szín hozzá lett adva a rangodhoz.`);
-}
     } catch (error) {
         console.log(error);
     }
@@ -347,8 +296,8 @@ client.on('interactionCreate', async (interaction) => {
     const textmsg = interaction.fields.getTextInputValue('custommsg');
     const userId = interaction.message.components[0].components[0].data.custom_id.split("_")[1];
     const user = await interaction.guild.members.fetch(userId);
-    user.send(`**Message from ${interaction.user}**\n\n${textmsg}`);
-    interaction.reply({content: "Successfully sent them a message.", ephemeral: true});
+    user.send(`**Üzenet érkezett ${interaction.user}-től**\n\n${textmsg}`);
+    interaction.reply({content: "Sikeresen elküldted az üzenetet!", ephemeral: true});
    
 });
 //partial reactions handler
