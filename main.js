@@ -295,36 +295,44 @@ client.on('interactionCreate', (interaction) => {
 });
 
 client.on('interactionCreate', async (interaction) => {
-    //szín választó
     try{
-    if(!interaction.isButton()) return;
-    await interaction.deferReply({
-        ephemeral: true,
-    });
-
-    const role = interaction.guild.roles.cache.get(interaction.customId);
-    if(!role){
-        interaction.editReply({
-            content: "Nem találtam meg ez a rangot.",
-        })
-        return;
+        if(!interaction.isButton()) return;
+        if(interaction.customId === "sendmsg"){
+            if(interaction.customId.split("_")[1] === interaction.user.id){
+                return interaction.reply({content: "You can't send yourself a message.", ephemeral: true});
+            }
+            const modal = new discord.ModalBuilder()
+                .setCustomId('msgmodal')
+                .setTitle('Send someone a message');
+            const msgBuilder = new discord.TextInputBuilder()
+                .setCustomId('custommsg')
+                .setLabel("What message would you like to send?")
+                .setStyle(discord.TextInputStyle.Paragraph)
+                .setPlaceholder('Enter some cool text!');
+                const modalRow = new discord.ActionRowBuilder().addComponents(msgBuilder);
+                modal.addComponents(modalRow);
+    
+            await interaction.showModal(modal);
+        
+        }else {
+        await interaction.deferReply({
+            ephemeral: true,
+        });
     }
-
-    const hasrole = interaction.member.roles.cache.has(role.id);
-
-    if(hasrole){
-        await interaction.member.roles.remove(role);
-        await interaction.editReply(`A ${role} szín törölve lett a rangjaid közül.`);
-        return;
-    }
-
-    await interaction.member.roles.add(role);
-    await interaction.editReply(`A ${role} szín hozzá lett adva a rangodhoz.`);
-    } catch (error) {
+    }catch (error) {
         console.log(error);
     }
 });
 
+client.on('interactionCreate', async (interaction) => {
+
+    if(!interaction.isModalSubmit()) return;
+    const textmsg = interaction.fields.getTextInputValue('custommsg');
+    const userId = interaction.message.components[0].components[0].data.custom_id.split("_")[1];
+    const user = await interaction.guild.users.fetch(userId);
+    user.send(textmsg);
+    interaction.reply({content: "Successfully sent them a message.", ephemeral: true});
+});
 //partial reactions handler
 client.on('raw', packet => {
     //Don't want this to run on unrelated packets
