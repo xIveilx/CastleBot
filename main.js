@@ -78,7 +78,8 @@ client.on('ready', async (c) => {
 
     client.user.setActivity({
         name: 'Chill Zone',
-        type: ActivityType.Watching,
+        type: ActivityType.Streaming,
+        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     })
 });
 
