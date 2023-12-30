@@ -78,6 +78,7 @@ client.on('ready', async (c) => {
 
     client.user.setActivity({
         name: 'Chill Zone',
+        type: ActivityType.Watching,
     })
 });
 
