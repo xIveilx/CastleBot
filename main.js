@@ -296,7 +296,7 @@ client.on('interactionCreate', async (interaction) => {
     //szín választó
     try{
     if(!interaction.isButton()) return;
-    if(interaction.customId === "sendmsg"){
+    if(interaction.customId.startsWith("sendmsg")){
         if(interaction.customId.split("_")[1] === interaction.user.id){
             return interaction.reply({content: "You can't send yourself a message.", ephemeral: true});
         }
@@ -347,7 +347,7 @@ client.on('interactionCreate', async (interaction) => {
     const textmsg = interaction.fields.getTextInputValue('custommsg');
     const userId = interaction.message.components[0].components[0].data.custom_id.split("_")[1];
     const user = await interaction.guild.users.fetch(userId);
-    user.send(textmsg);
+    user.send(`**Message from ${interaction.user}**\n\n${textmsg}`);
     interaction.reply({content: "Successfully sent them a message.", ephemeral: true});
    
 });
