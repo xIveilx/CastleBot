@@ -167,7 +167,7 @@ client.on('interactionCreate', (interaction) => {
         interaction.reply('pong!');
     }
     //2 szám összeadása
-    if(interaction.commandName == 'valorant' && interaction.channelId === '1137112266123255889'){
+    if((interaction.commandName == 'valorant') && interaction.channelId === '1137112266123255889' || interaction.channelId === '1185072726453530664'){
         //if (!interaction.member.roles.cache.has('1186234636163092500')) {
         //    interaction.reply(`nincs jogod ehez! :D ${interaction.user.username}`);
         //    return;
