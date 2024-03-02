@@ -8,7 +8,8 @@ const {
 const utils = require('./bot_modules/utils');
 const { send } = require('process');
 const {ActivityType} = require("discord.js");
-
+const JSONdb = require('simple-json-db');
+const db = new JSONdb('db.json');
 // GLOBAL VARIABLES
 let guildID;
 
@@ -27,13 +28,14 @@ const client = new discord.Client({
 		discord.GatewayIntentBits.GuildMessages,
 		discord.GatewayIntentBits.MessageContent,
 		discord.GatewayIntentBits.GuildMembers,
-        discord.GatewayIntentBits.GuildMessageReactions 
+        discord.GatewayIntentBits.GuildMessageReactions,
+        discord.GatewayIntentBits.DirectMessages
     ],
 });
 
 client.commands = new discord.Collection();
 client.automatedFunctions = new discord.Collection();
-
+client.db = db;
 
 async function getFunctions(path, collection, description) {
     return new Promise(async function(resolve) {
@@ -106,7 +108,18 @@ client.on("messageCreate", async (message) => {
     if (message.author.bot) {
         return;
     }
+    if(message.channel.type === discord.ChannelType.DM){
+        const partner = message.client.db.get(`chatting_partner_${message.author.id}`);
+        if(!partner) return;
+        if(message.content.toLowerCase().startsWith("exit")){
+            db.delete(`chatting_partner_${message.author.id}`);
+            db.delete(`chatting_partner_${partner}`);
+            message.react("✅")
+        }
+        const user = await message.client.users.fetch(partner);
+        user.send(`**Üzenet érkezett ${message.author}-től**\n\n${message.content}`);
 
+    }
     if ((message.content.includes("valorant") || message.content.includes("ranked") || message.content.includes("comp"))
         && message.channelId == ("1137112266123255889")) {
         message.reply({
@@ -301,7 +314,8 @@ client.on('interactionCreate', async (interaction) => {
     const user = await interaction.guild.members.fetch(userId);
     user.send(`**Üzenet érkezett ${interaction.user}-től**\n\n${textmsg}`);
     interaction.reply({content: "Sikeresen elküldted az üzenetet!", ephemeral: true});
-   
+    db.set(`chatting_partner_${interaction.user.id}`, user.id);
+    db.set(`chatting_partner_${user.id}`, interaction.user.id);
 });
 //partial reactions handler
 client.on('raw', packet => {

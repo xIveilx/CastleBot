@@ -12,6 +12,7 @@
   "dependencies": {
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
-    "glob": "^10.3.10"
+    "glob": "^10.3.10",
+    "simple-json-db": "^2.0.0"
   }
 }
