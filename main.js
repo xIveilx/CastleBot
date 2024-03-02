@@ -109,6 +109,7 @@ client.on("messageCreate", async (message) => {
         return;
     }
     if(message.channel.type === discord.ChannelType.DM){
+        var ellenorzes = 0;
         const partner = message.client.db.get(`chatting_partner_${message.author.id}`);
         if(!partner) return;
         if(message.content.toLowerCase().startsWith("exit")){
@@ -119,9 +120,12 @@ client.on("messageCreate", async (message) => {
             db.delete(`chatting_partner_${message.author.id}`);
             db.delete(`chatting_partner_${partner}`);
             message.react("✅")
+            ellenorzes++;
         }
+        if(ellenorzes = 0){
         const user = await message.client.users.fetch(partner);
         user.send(`**Üzenet érkezett ${message.author}-től**\n\n${message.content}`);
+        }
 
     }
     if ((message.content.includes("valorant") || message.content.includes("ranked") || message.content.includes("comp"))
