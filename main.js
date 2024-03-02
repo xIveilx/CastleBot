@@ -112,6 +112,10 @@ client.on("messageCreate", async (message) => {
         const partner = message.client.db.get(`chatting_partner_${message.author.id}`);
         if(!partner) return;
         if(message.content.toLowerCase().startsWith("exit")){
+
+            const user = await message.client.users.fetch(partner);
+            user.send(`## ${message.author} Bezárta a beszélgetést!`);
+
             db.delete(`chatting_partner_${message.author.id}`);
             db.delete(`chatting_partner_${partner}`);
             message.react("✅")
